@@ -20,4 +20,24 @@ public class HardcodedResponses {
 
         return resp;
     }
+    
+    public static String returnVideoplaybackResponse(String mime, int contentLength){
+        String resp= "Accept-Ranges:bytes\r\n"
+                //+ "Access-Control-Allow-Credentials:true\r\n"
+                //+ "Access-Control-Allow-Origin:http://www.youtube.com\r\n"
+                + "Alternate-Protocol:80:quic\r\n"
+                + "Cache-Control:private, max-age=20930\r\n"
+                + "Connection:keep-alive\r\n"
+                + "Content-Length:"+contentLength+"\r\n"
+                + "Content-Type: "+mime+"\r\n"
+                //+ "Date:Thu, 01 Aug 2013 20:51:45 GMT\r\n"
+                //+ "Expires:Thu, 01 Aug 2013 20:51:45 GMT\r\n"
+                //+ "Last-Modified:Fri, 28 Jun 2013 14:34:55 GMT\r\n"
+                + "Server:gvs 1.0\r\n"
+                //+ "Timing-Allow-Origin:http://www.youtube.com\r\n"
+                + "X-Content-Type-Options:nosniff\r\n"
+                + "\r\n";
+        
+        return resp;
+    }
 }
