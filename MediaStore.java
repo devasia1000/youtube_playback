@@ -1,51 +1,61 @@
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Arrays;
+
+
 /**
  *
  * @author devasia
  */
-import java.io.*;
+
 
 public class MediaStore {
 
-    private FileOutputStream wt;
-    private FileInputStream in;
-    private String clen;
-    private String mime;
-
-    MediaStore(String cl, String type) {
-
-        clen = cl;
-        mime = type;
-
-        try {
-            if (mime.equals("audio") || mime.equals("video")) {
-                File f = new File(clen + "-" + mime + ".mp4");
-                f.createNewFile();
-
-                wt = new FileOutputStream(f);
-            } else {
-                System.err.println("unknown media type");
+    String clen;
+    String type;
+    byte[] media;
+    
+    public MediaStore(File f){
+        try{
+            
+            String name=f.getName();
+            String el[]=name.split("-");
+            clen=el[0];
+            type=el[1].replace(".mp4", "");
+            
+            if(!f.exists()){
+                System.err.println("media file does not exist");
                 System.exit(-1);
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            
+            media = new byte[(int) f.length()];
+            DataInputStream dis = new DataInputStream(new FileInputStream(f));
+            dis.readFully(media);
+            dis.close();
+            
+        } catch (Exception e){
+            System.err.println("could not read media file");
+            System.exit(-1);
         }
     }
-
-    public void storeMedia(HTTPResponse resp) throws Exception {
-        wt.write(resp.returnContent());
-        wt.flush();
-    }
-
-    public void getMedia(String req) throws Exception {
-    }
-
-    public String getCLEN() {
+    
+    public String getClen(){
         return clen;
     }
-
-    public String getMime() {
-        return mime;
+    
+    public String getType(){
+        return type;
+    }
+    
+    public byte[] processRangeRequest(int fin, int init){
+        if(init>=fin){
+            System.err.println("incorrect range request");
+            System.exit(-1);
+        }
+        
+        byte[] dat=Arrays.copyOfRange(media, init, fin);
+        return dat;
     }
 }
