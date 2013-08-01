@@ -19,13 +19,13 @@ public class MediaManager {
             if (store.getCLEN().equals(clen) && store.getMime().equals(mime)) {
                 exists = true;
                 store.storeMedia(resp);
-                System.out.println("stored "+parseRange(req)+" bytes of "+mime+" data");
+                System.out.println("stored " + parseRange(req) + " bytes of " + mime + " data");
             }
         }
 
         if (!exists) {
             mediaList.add(new MediaStore(clen, mime));
-            System.out.println("stored "+parseRange(req)+" bytes of "+mime+" data");
+            System.out.println("stored " + parseRange(req) + " bytes of " + mime + " data");
         }
 
     }

@@ -1,13 +1,13 @@
 
+/**
+ *
+ * @author devasia
+ */
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 
-/**
- *
- * @author devasia
- */
 public class Main {
 
     private static String logDirectory = "/home/devasia/ourtube/mapping/";
