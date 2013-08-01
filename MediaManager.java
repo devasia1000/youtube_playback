@@ -1,86 +1,65 @@
-
-
-
 /**
  *
  * @author devasia
  */
 
-import java.io.*;
+import java.util.ArrayList;
 
 public class MediaManager {
 
-    FileOutputStream wt;
-    FileInputStream in;
-
-    MediaManager(String clen, String type) {
-
-        try {
-            if(type.equals("audio") || type.equals("video")){
-                File f=new File(clen+"."+type);
-                f.createNewFile();
-                
-                wt=new FileOutputStream(f);
+    private static ArrayList<MediaStore> mediaList=new ArrayList<MediaStore>();
+    
+    public static void handle(String req, HTTPResponse resp) throws Exception{
+        for(MediaStore store: mediaList){
+            String clen=parseClen(req);
+            String mime=parseMime(req);
+            if(store.getCLEN().equals(clen) && store.getMime().equals(mime)){
+                store.storeMedia(resp);
             } else {
-                System.err.println("unknown media type");
-                System.exit(-1);
+                mediaList.add(new MediaStore(clen, mime));
             }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
     }
     
-    public void storeMedia(HTTPResponse resp) throws Exception{
-        wt.write(resp.returnContent());
-        wt.flush();
-    }
-    
-    public void getMedia(String req) throws Exception{
-        
-    }
-    
-    public static String getCLEN(String req){
-        String ret="";
+    private static String parseClen(String req){
+        String clen="";
         
         String el[]=req.split("&");
         for(String s:el){
-            if(s.contains("clen")){
+            if(s.toLowerCase().contains("clen")){
                 String el2[]=s.split("=");
-                ret=el2[1].trim();
+                clen=el2[1].trim();
             }
         }
         
-        if(ret.equals("")){
-            System.err.println("could not find clen in videoplayback request");
-        }
+        if(clen.equals("")){
+            System.err.println("could not parse clen");
+            System.exit(-1);
+        } 
         
-        return ret;
+        return clen;
     }
     
-    public static String getMime(String req){
-        String ret="";
+    private static String parseMime(String req){
+        String mime="";
         
         String el[]=req.split("&");
         for(String s:el){
-            if(s.contains("mime")){
+            if(s.toLowerCase().contains("mime")){
                 String el2[]=s.split("=");
                 if(el2[1].trim().contains("audio")){
-                    ret="audio";
+                    mime="audio";
                 } else if (el2[1].trim().contains("video")){
-                    ret="video";
+                    mime="video";
                 }
             }
         }
         
-        if(ret.equals("")){
-            System.err.println("could not find mime in videoplayback request");
-        }
+        if(mime.equals("")){
+            System.err.println("could not parse clen");
+            System.exit(-1);
+        } 
         
-        return ret;
+        return mime;
     }
-    
-    
 }
-
