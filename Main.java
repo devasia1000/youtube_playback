@@ -63,6 +63,9 @@ public class Main {
 
             byte[] response = Arrays.copyOfRange(d, pos, d.length);
             table.put(headerLine, new HTTPResponse(response));
+            if (headerLine.contains("videoplayback")) {
+                MediaManager.handle(headerLine, new HTTPResponse(response));
+            }
         }
     }
 
