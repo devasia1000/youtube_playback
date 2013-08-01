@@ -23,7 +23,7 @@ public class MediaStore {
         
         try {
             if(mime.equals("audio") || mime.equals("video")){
-                File f=new File(clen+"."+mime);
+                File f=new File(clen+"-"+mime+".mp4");
                 f.createNewFile();
                 
                 wt=new FileOutputStream(f);
