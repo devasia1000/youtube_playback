@@ -3,31 +3,56 @@
  *
  * @author devasia
  */
+import java.io.File;
 import java.util.ArrayList;
 
 public class MediaManager {
 
     private static ArrayList<MediaStore> mediaList = new ArrayList<MediaStore>();
 
-    public static void handle(String req, HTTPResponse resp) throws Exception {
-        boolean exists = false;
+    public void init() {
+    }
+
+    public static HTTPResponse handle(String req) {
+        HTTPResponse resp = null;
 
         String clen = parseClen(req);
-        String mime = parseMime(req);
+        String type = parseMime(req);
+        String mime = type + "/mp4";
 
+        String range = parseRange(req);
+        range = range.replace("range=", "");
+        String el[] = range.split("-");
+        int initRange = Integer.parseInt(el[0]);
+        int finRange = Integer.parseInt(el[1]);
+
+
+        boolean exists = false;
         for (MediaStore store : mediaList) {
-            if (store.getCLEN().equals(clen) && store.getMime().equals(mime)) {
+            if (store.getClen().equals(clen) && store.getType().equals(type)) {
                 exists = true;
-                store.storeMedia(resp);
-                System.out.println("stored " + parseRange(req) + " bytes of " + mime + " data");
+                byte[] b = store.processRangeRequest(finRange, initRange);
+                String respHeaders = HardcodedResponses.returnVideoplaybackResponse(mime, b.length);
+                byte[] data = HTTPResponse.concat(respHeaders.getBytes(), b);
+                resp = new HTTPResponse(data);
             }
         }
 
         if (!exists) {
-            mediaList.add(new MediaStore(clen, mime));
-            System.out.println("stored " + parseRange(req) + " bytes of " + mime + " data");
+            MediaStore store = new MediaStore(new File("media/" + clen + "-" + type + ".mp4"));
+            mediaList.add(store);
+            byte[] b = store.processRangeRequest(finRange, initRange);
+            String respHeaders = HardcodedResponses.returnVideoplaybackResponse(mime, b.length);
+            byte[] data = HTTPResponse.concat(respHeaders.getBytes(), b);
+            resp = new HTTPResponse(data);
         }
 
+        if (resp == null) {
+            System.err.println("could not create HTTPResponse");
+            System.exit(-1);
+        }
+
+        return resp;
     }
 
     private static String parseClen(String req) {
@@ -36,7 +61,7 @@ public class MediaManager {
         String el[] = req.split("&");
 
         for (String s : el) {
-            if (s.toLowerCase().contains("clen")) {
+            if (s.startsWith("clen")) {
                 String el2[] = s.split("=");
                 clen = el2[1].trim();
                 break;
