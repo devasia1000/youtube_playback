@@ -38,8 +38,13 @@ public class HTTPPlayback implements Runnable {
                 line = line.replace("\r", "");
                 line = line.replace("\n", "");
                 //System.out.println(line);
-                HTTPResponse resp = Main.returnResponse(line);
-                //System.out.println("got response for: "+line);
+                HTTPResponse resp=null;
+                if (line.contains("stream_204")){
+                    resp=new HTTPResponse(HardcodedResponses.returnStream204Response().getBytes());
+                } else {
+                    resp = Main.returnResponse(line);
+                }
+                
 
                 if (resp == null) {
                     System.err.println("could not find data for: " + line + "\n");
