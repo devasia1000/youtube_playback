@@ -46,19 +46,19 @@ public class HTTPPlayback implements Runnable {
                 } else {
                     resp = Main.returnResponse(line);
                 }
-                
-                
+
+
                 if (resp == null) {
                     System.err.println(line + "\n");
                     clientSocket.close();
                 }
-                
+
                 if (!clientSocket.isClosed()) {
                     responseWriter.write(resp.returnTotalData());
                     //System.out.print(new String(resp.returnTotalData()));
                     responseWriter.flush();
                     responseWriter.close();
-                } 
+                }
 
                 clientSocket.close();
             }
