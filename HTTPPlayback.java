@@ -41,18 +41,21 @@ public class HTTPPlayback implements Runnable {
                 HTTPResponse resp = null;
                 if (line.contains("stream_204")) {
                     resp = new HTTPResponse(HardcodedResponses.returnStream204Response().getBytes());
+                } else if (line.contains("videoplayback")) {
+                    resp=MediaManager.handle(line);
                 } else {
                     resp = Main.returnResponse(line);
                 }
-
-
+                
+                
                 if (resp == null) {
-                    System.err.println("could not find data for: " + line + "\n");
+                    System.err.println(line + "\n");
                     clientSocket.close();
                 }
-
+                
                 if (!clientSocket.isClosed()) {
                     responseWriter.write(resp.returnTotalData());
+                    System.out.print(new String(resp.returnTotalData()));
                     responseWriter.flush();
                 }
 
