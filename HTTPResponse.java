@@ -36,16 +36,6 @@ public class HTTPResponse {
 
         byte[] result = Arrays.copyOf(headers.getBytes(), headers.getBytes().length + content.length);
         System.arraycopy(content, 0, result, headers.getBytes().length, content.length);
-
-        /* checking if arrays are the same */
-        /*
-         System.out.println(result==data);
-        
-         for(int i=0;i<result.length;i++){
-         if(result[i]!=data[i]){
-         System.out.println("false1");
-         } 
-         }*/
     }
 
     public byte[] returnTotalData() {

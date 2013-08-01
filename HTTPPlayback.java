@@ -42,7 +42,7 @@ public class HTTPPlayback implements Runnable {
                 if (line.contains("stream_204")) {
                     resp = new HTTPResponse(HardcodedResponses.returnStream204Response().getBytes());
                 } else if (line.contains("videoplayback")) {
-                    resp=MediaManager.handle(line);
+                    resp = MediaManager.handle(line);
                 } else {
                     resp = Main.returnResponse(line);
                 }
@@ -55,9 +55,10 @@ public class HTTPPlayback implements Runnable {
                 
                 if (!clientSocket.isClosed()) {
                     responseWriter.write(resp.returnTotalData());
-                    System.out.print(new String(resp.returnTotalData()));
+                    //System.out.print(new String(resp.returnTotalData()));
                     responseWriter.flush();
-                }
+                    responseWriter.close();
+                } 
 
                 clientSocket.close();
             }

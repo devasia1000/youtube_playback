@@ -36,7 +36,7 @@ public class MediaStore {
             dis.close();
             
         } catch (Exception e){
-            System.err.println("could not read media file");
+            System.err.println("could not read media file properly");
             System.exit(-1);
         }
     }
@@ -55,7 +55,8 @@ public class MediaStore {
             System.exit(-1);
         }
         
-        byte[] dat=Arrays.copyOfRange(media, init, fin);
+        // Do NOT remove 'fin+1', this has been tested and it is correct! Look at 'TestingClass' in Github for details
+        byte[] dat=Arrays.copyOfRange(media, init, fin+1);
         return dat;
     }
 }

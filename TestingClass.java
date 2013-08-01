@@ -24,8 +24,11 @@ public class TestingClass {
             MediaStore store=new MediaStore(new File("media/12844485-audio.mp4"));
             byte[] compare=store.processRangeRequest(65535, 0);
             
-            for(int i=0;i<Math.min(compare.length, mediaFromFile.length);i++){
+            for(int i=0;i<Math.max(mediaFromFile.length, compare.length);i++){
                 System.out.println(compare[i]==mediaFromFile[i]);
             }
+            
+            System.out.println("direct download length: "+mediaFromFile.length);
+            System.out.println("local length: "+compare.length);
     }
 }
