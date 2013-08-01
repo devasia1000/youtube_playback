@@ -36,7 +36,7 @@ public class MultiThreadedServer implements Runnable {
             while (!((line = rd.readLine()).equals(""))) {
                 line = line.replace("\r", "");
                 line = line.replace("\n", "");
-                mess=mess+line+"\r\n";
+                mess = mess + line + "\r\n";
 
                 if (line.toLowerCase().contains("host")) {
                     String el[] = line.split(":");
@@ -49,21 +49,21 @@ public class MultiThreadedServer implements Runnable {
 
             if (host != null) {
                 Socket s = new Socket(host, 80);
-                BufferedWriter wt=new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+                BufferedWriter wt = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
                 wt.write(mess);
                 wt.flush();
                 System.out.println("wrote request to server");
-                
-                InputStream responseReader=s.getInputStream();
-                byte[] b=new byte[200000];
-                int bytesRead=responseReader.read(b);
-                byte[] data=Arrays.copyOfRange(b, 0, bytesRead);
-                System.out.println("read response from server\n"+new String(data));
-                
+
+                InputStream responseReader = s.getInputStream();
+                byte[] b = new byte[200000];
+                int bytesRead = responseReader.read(b);
+                byte[] data = Arrays.copyOfRange(b, 0, bytesRead);
+                System.out.println("read response from server\n" + new String(data));
+
                 s.close();
                 System.out.println("closed connection to server");
-                
-                if(!clientSocket.isClosed()){
+
+                if (!clientSocket.isClosed()) {
                     responseWriter.write(data);
                     responseWriter.flush();
                     clientSocket.close();
