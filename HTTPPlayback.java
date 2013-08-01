@@ -52,7 +52,7 @@ public class HTTPPlayback implements Runnable {
                 }
 
                 if (!clientSocket.isClosed()) {
-                    responseWriter.write(resp.returnData());
+                    responseWriter.write(resp.returnTotalData());
                     responseWriter.flush();
                 }
 
