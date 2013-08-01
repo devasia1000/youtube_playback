@@ -75,12 +75,6 @@ public class MultiThreadedServer implements Runnable {
                 System.err.println("could not parse host, ending thread");
             }
 
-
-
-
-
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
