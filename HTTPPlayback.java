@@ -54,7 +54,7 @@ public class HTTPPlayback implements Runnable {
 
 
                     if(resp==null){
-                        resp=HardcodedResponses.returnHardcodedResponse(line);
+                        resp=HardcodedResponseGenerator.returnHardcodedResponse(line);
                     }
                     
                     if (resp != null) {

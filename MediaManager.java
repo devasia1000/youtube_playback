@@ -32,7 +32,7 @@ public class MediaManager {
             if (store.getClen().equals(clen) && store.getType().equals(type)) {
                 exists = true;
                 byte[] b = store.processRangeRequest(finRange, initRange);
-                String respHeaders = HardcodedResponses.returnVideoplaybackResponse(mime, b.length);
+                String respHeaders = HardcodedResponseGenerator.returnVideoplaybackResponse(mime, b.length);
                 byte[] data = HTTPResponse.concat(respHeaders.getBytes(), b);
                 resp = new HTTPResponse(data);
             }
@@ -42,7 +42,7 @@ public class MediaManager {
             MediaStore store = new MediaStore(new File("media/" + clen + "-" + type + ".mp4"));
             mediaList.add(store);
             byte[] b = store.processRangeRequest(finRange, initRange);
-            String respHeaders = HardcodedResponses.returnVideoplaybackResponse(mime, b.length);
+            String respHeaders = HardcodedResponseGenerator.returnVideoplaybackResponse(mime, b.length);
             byte[] data = HTTPResponse.concat(respHeaders.getBytes(), b);
             resp = new HTTPResponse(data);
         }
