@@ -11,11 +11,12 @@ import java.util.*;
 public class Main {
 
     private static String logDirectory = "/home/devasia/ourtube/mapping/";
-    private static Hashtable<String, HTTPResponse> table = new Hashtable<>();
+    private static Hashtable<String, HTTPResponse> responseTable = new Hashtable<>();
     private static int port = 80;
 
     public static void main(String args[]) throws Exception {
         generateHashTable();
+        MediaManager.downloadMedia();
         //printHashTableKeys();
 
         ServerSocket ssock = new ServerSocket(port);
@@ -62,13 +63,13 @@ public class Main {
             }
 
             byte[] response = Arrays.copyOfRange(d, pos, d.length);
-            table.put(headerLine, new HTTPResponse(response));
+            responseTable.put(headerLine, new HTTPResponse(response));
         }
     }
 
     private static void printHashTable() {
-        Enumeration<String> keys = table.keys();
-        Enumeration<HTTPResponse> elements = table.elements();
+        Enumeration<String> keys = responseTable.keys();
+        Enumeration<HTTPResponse> elements = responseTable.elements();
 
         while (keys.hasMoreElements()) {
             System.out.print(keys.nextElement() + "\n\n");
@@ -77,19 +78,19 @@ public class Main {
     }
 
     public static void printHashTableKeys() {
-        Enumeration<String> keys = table.keys();
+        Enumeration<String> keys = responseTable.keys();
         while (keys.hasMoreElements()) {
             System.out.println(keys.nextElement());
         }
     }
     
     public static Enumeration<String> returnHashTableKeys(){
-        Enumeration<String> keys = table.keys();
+        Enumeration<String> keys = responseTable.keys();
         return keys;
     }
     
     public static HTTPResponse hashTableLookup(String key){
-        HTTPResponse resp=(HTTPResponse) table.get(key);
+        HTTPResponse resp=(HTTPResponse) responseTable.get(key);
         if(resp==null){
             System.err.println("could not find key in hash table");
         }
@@ -97,6 +98,6 @@ public class Main {
     }
 
     public static HTTPResponse returnResponse(String requestLine) {
-        return table.get(requestLine);
+        return responseTable.get(requestLine);
     }
 }
