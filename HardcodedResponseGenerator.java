@@ -6,7 +6,7 @@ import java.util.Enumeration;
  *
  * @author devasia
  */
-public class HardcodedResponses {
+public class HardcodedResponseGenerator {
 
     public static String returnStream204Response() {
         String resp = "HTTP/1.1 200 OK\r\n"
