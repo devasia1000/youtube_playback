@@ -14,7 +14,7 @@ public class HTTPPlayback implements Runnable {
     private Socket clientSocket;
     private InputStream requestReader;
     private OutputStream responseWriter;
-    int numberOfRequests=0;
+    int numberOfRequests = 0;
 
     HTTPPlayback(Socket csocket) {
         this.clientSocket = csocket;
@@ -53,16 +53,16 @@ public class HTTPPlayback implements Runnable {
                     }
 
 
-                    if(resp==null){
-                        resp=HardcodedResponseGenerator.returnHardcodedResponse(line);
+                    if (resp == null) {
+                        resp = HardcodedResponseGenerator.returnHardcodedResponse(line);
                     }
-                    
+
                     if (resp != null) {
                         if (!clientSocket.isClosed()) {
                             responseWriter.write(resp.returnTotalData());
                             //System.out.print(new String(resp.returnTotalData()));
                             responseWriter.flush();
-                        } 
+                        }
                     } else {
                         /* failsafe dummy response if we can't match any prefixes in the has table */
                         String dummyResponse = new String("HTTP 200 OK\r\n"
@@ -71,7 +71,7 @@ public class HTTPPlayback implements Runnable {
                         responseWriter.write(dummyResponse.getBytes());
                         responseWriter.flush();
                     }
-                } 
+                }
 
             }
 

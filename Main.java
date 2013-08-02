@@ -83,15 +83,15 @@ public class Main {
             System.out.println(keys.nextElement());
         }
     }
-    
-    public static Enumeration<String> returnHashTableKeys(){
+
+    public static Enumeration<String> returnHashTableKeys() {
         Enumeration<String> keys = responseTable.keys();
         return keys;
     }
-    
-    public static HTTPResponse hashTableLookup(String key){
-        HTTPResponse resp=(HTTPResponse) responseTable.get(key);
-        if(resp==null){
+
+    public static HTTPResponse hashTableLookup(String key) {
+        HTTPResponse resp = (HTTPResponse) responseTable.get(key);
+        if (resp == null) {
             System.err.println("could not find key in hash table");
         }
         return resp;

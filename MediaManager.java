@@ -63,20 +63,20 @@ public class MediaManager {
             String key = keys.nextElement();
             if (key.contains("videoplayback")) {
                 /* create media directory if it does not exist */
-                File dir=new File("media");
-                if(!dir.exists()){
+                File dir = new File("media");
+                if (!dir.exists()) {
                     dir.mkdir();
                 }
-                
+
                 //System.out.println(key);
                 String clen = parseClen(key);
                 String type = parseType(key);
-                
+
                 String url = key.replace("GET ", "");
                 url = url.replace("POST ", "");
-                url=url.replace(" HTTP/1.1", "");
-                url="http://"+mediaDomain+url;
-                
+                url = url.replace(" HTTP/1.1", "");
+                url = "http://" + mediaDomain + url;
+
                 String range = parseRange(key);
                 url = url.replace(range, "range=0-" + Long.MAX_VALUE);
                 File f = null;
@@ -87,12 +87,12 @@ public class MediaManager {
                     if (!f.exists()) {
                         f.createNewFile();
 
-                        System.out.println("downloading media stream to "+f.getAbsolutePath()+", please be patient...");
+                        System.out.println("downloading media stream to " + f.getAbsolutePath() + ", please be patient...");
                         Process p = Runtime.getRuntime().exec("wget -O media/" + clen + "-" + type + " " + url);
                         p.waitFor();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                        String line=null;
-                        while((line=reader.readLine())!=null){
+                        String line = null;
+                        while ((line = reader.readLine()) != null) {
                             System.out.println(line);
                         }
                         reader.close();
