@@ -14,6 +14,7 @@ public class HTTPPlayback implements Runnable {
     private Socket clientSocket;
     private InputStream requestReader;
     private OutputStream responseWriter;
+    int numberOfRequests=0;
 
     HTTPPlayback(Socket csocket) {
         this.clientSocket = csocket;
@@ -32,36 +33,49 @@ public class HTTPPlayback implements Runnable {
     public void run() {
         try {
             BufferedReader rd = new BufferedReader(new InputStreamReader(requestReader));
-            String line = rd.readLine();
 
-            if (line != null && (line.contains("GET") || line.contains("POST"))) {
-                line = line.replace("\r", "");
-                line = line.replace("\n", "");
-                //System.out.println(line);
-                HTTPResponse resp = null;
-                if (line.contains("stream_204")) {
-                    resp = new HTTPResponse(HardcodedResponses.returnStream204Response().getBytes());
-                } else if (line.contains("videoplayback")) {
-                    resp = MediaManager.handle(line);
-                } else {
-                    resp = Main.returnResponse(line);
-                }
+            while (true) {
+
+                String line = rd.readLine();
+                //System.out.print(line);
+
+                if (line != null && (line.contains("GET") || line.contains("POST"))) {
+                    numberOfRequests++;
+                    System.out.println("handled "+numberOfRequests+" request with same socket");
+                    line = line.replace("\r", "");
+                    line = line.replace("\n", "");
+                    //System.out.println(line);
+                    HTTPResponse resp = null;
+                    if (line.contains("stream_204")) {
+                        resp = new HTTPResponse(HardcodedResponses.returnStream204Response().getBytes());
+                    } else if (line.contains("videoplayback")) {
+                        resp = MediaManager.handle(line);
+                    } else {
+                        resp = Main.returnResponse(line);
+                    }
 
 
-                if (resp == null) {
-                    System.err.println(line + "\n");
-                    clientSocket.close();
-                }
+                    if (resp != null) {
+                        if (!clientSocket.isClosed()) {
+                            responseWriter.write(resp.returnTotalData());
+                            //System.out.print(new String(resp.returnTotalData()));
+                            responseWriter.flush();
+                        } else {
+                            break;
+                        }
+                    } else {
+                        String dummyResponse = new String("HTTP 200 OK\r\n"
+                                + "Content-Length: 0\r\n"
+                                + "\r\n");
+                        responseWriter.write(dummyResponse.getBytes());
+                        responseWriter.flush();
+                    }
+                } 
 
-                if (!clientSocket.isClosed()) {
-                    responseWriter.write(resp.returnTotalData());
-                    //System.out.print(new String(resp.returnTotalData()));
-                    responseWriter.flush();
-                    responseWriter.close();
-                }
-
-                clientSocket.close();
             }
+            
+            clientSocket.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
