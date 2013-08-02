@@ -82,6 +82,19 @@ public class Main {
             System.out.println(keys.nextElement());
         }
     }
+    
+    public static Enumeration<String> returnHashTableKeys(){
+        Enumeration<String> keys = table.keys();
+        return keys;
+    }
+    
+    public static HTTPResponse hashTableLookup(String key){
+        HTTPResponse resp=(HTTPResponse) table.get(key);
+        if(resp==null){
+            System.err.println("could not find key in hash table");
+        }
+        return resp;
+    }
 
     public static HTTPResponse returnResponse(String requestLine) {
         return table.get(requestLine);

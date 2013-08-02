@@ -1,4 +1,7 @@
 
+import java.util.Enumeration;
+
+
 /**
  *
  * @author devasia
@@ -41,6 +44,29 @@ public class HardcodedResponses {
                 + "X-Content-Type-Options: nosniff\r\n"
                 + "\r\n";
 
+        return resp;
+    }
+    
+    public static HTTPResponse returnHardcodedResponse(String line){
+        HTTPResponse resp=null;
+        String el[]=line.split("\\?");
+        String url=el[0];
+        
+        Enumeration <String> keys=Main.returnHashTableKeys();
+        while(keys.hasMoreElements()){
+            String key=keys.nextElement();
+            String temp[]=key.split("\\?");
+            String u=temp[0];
+            
+            if(u.equals(url)){
+                resp=Main.hashTableLookup(key);
+            }
+        }
+        
+        if(resp==null){
+            System.err.println("could not find key in hash table");
+        }
+        
         return resp;
     }
 }

@@ -41,29 +41,30 @@ public class HTTPPlayback implements Runnable {
 
                 if (line != null && (line.contains("GET") || line.contains("POST"))) {
                     numberOfRequests++;
-                    System.out.println("handled "+numberOfRequests+" request with same socket");
+                    //System.out.println("handled "+numberOfRequests+" request with same socket");
                     line = line.replace("\r", "");
                     line = line.replace("\n", "");
                     //System.out.println(line);
                     HTTPResponse resp = null;
-                    if (line.contains("stream_204")) {
-                        resp = new HTTPResponse(HardcodedResponses.returnStream204Response().getBytes());
-                    } else if (line.contains("videoplayback")) {
+                    if (line.contains("videoplayback")) {
                         resp = MediaManager.handle(line);
                     } else {
                         resp = Main.returnResponse(line);
                     }
 
 
+                    if(resp==null){
+                        resp=HardcodedResponses.returnHardcodedResponse(line);
+                    }
+                    
                     if (resp != null) {
                         if (!clientSocket.isClosed()) {
                             responseWriter.write(resp.returnTotalData());
                             //System.out.print(new String(resp.returnTotalData()));
                             responseWriter.flush();
-                        } else {
-                            break;
-                        }
+                        } 
                     } else {
+                        /* failsafe dummy response if we can't match any prefixes in the has table */
                         String dummyResponse = new String("HTTP 200 OK\r\n"
                                 + "Content-Length: 0\r\n"
                                 + "\r\n");
@@ -73,8 +74,6 @@ public class HTTPPlayback implements Runnable {
                 } 
 
             }
-            
-            clientSocket.close();
 
         } catch (Exception e) {
             e.printStackTrace();
