@@ -16,8 +16,10 @@ public class Main {
 
     public static void main(String args[]) throws Exception {
         generateHashTable();
-        MediaManager.downloadMedia();
-        //printHashTableKeys();
+        /* this function hangs indefinitely while downloading large files
+         * for now, we're going to assume that the media is already downloaded
+         */
+        //MediaManager.downloadMedia();
 
         ServerSocket ssock = new ServerSocket(port);
         System.out.println("Listening on port " + port);
