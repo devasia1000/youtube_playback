@@ -59,17 +59,24 @@ public class MultiThreadedServer implements Runnable {
                 byte[] data = Arrays.copyOfRange(b, 0, bytesRead);
                 System.out.println("read response from server\n" + new String(data));
 
+                responseWriter.write(data);
+                responseWriter.flush();
+                clientSocket.close();
+                System.out.println("wrote response to client");
+                
+                /* close server streams */
+                wt.close();
+                responseReader.close();
+                
+                /* close client streams */
+                responseWriter.close();
+                requestReader.close();
+                
+                /* close sockets */
                 s.close();
-                System.out.println("closed connection to server");
-
-                if (!clientSocket.isClosed()) {
-                    responseWriter.write(data);
-                    responseWriter.flush();
-                    clientSocket.close();
-                    System.out.println("wrote response to client");
-                } else {
-                    System.err.println("client socket is closed, ending thread");
-                }
+                clientSocket.close();
+                System.out.println("closed all connections");
+                
             } else {
                 System.err.println("could not parse host, ending thread");
             }
