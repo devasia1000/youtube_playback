@@ -10,7 +10,7 @@ import java.util.*;
 
 public class Main {
 
-    private static String logDirectory = "/home/devasia/youtube_recorder/mapping/";
+    private static String logDirectory = "/home/chromium/youtube_recorder/mapping/";
     private static Hashtable<String, HTTPResponse> responseTable = new Hashtable<>();
     private static int port = 80;
 
