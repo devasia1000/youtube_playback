@@ -19,7 +19,7 @@ public class HardcodedResponseGenerator {
                 + "Content-Length: " + contentLength + "\r\n"
                 + "Content-Type: " + mime + "\r\n"
                 + "Date: Thu, 01 Aug 2013 20:51:45 GMT\r\n"
-                + "Expires: Thu, 01 Aug 2013 20:51:45 GMT\r\n"
+                + "Expires: Thu, 23 Aug 2013 20:51:45 GMT\r\n"
                 + "Last-Modified: Fri, 28 Jun 2013 14:34:55 GMT\r\n"
                 + "Server: gvs 1.0\r\n"
                 + "Timing-Allow-Origin: http://www.youtube.com\r\n"
@@ -46,7 +46,9 @@ public class HardcodedResponseGenerator {
         }
 
         if (resp == null) {
-            System.err.println("could not find key in hash table");
+            System.err.println("could not match request using hash table. sending dummy response");
+            String str = "HTTP/1.1 204 No Content\r\nContent-Length: 0\r\n\r\n";
+            resp = new HTTPResponse(str.getBytes());
         }
 
         return resp;

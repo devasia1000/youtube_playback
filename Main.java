@@ -95,6 +95,8 @@ public class Main {
         HTTPResponse resp = (HTTPResponse) responseTable.get(key);
         if (resp == null) {
             System.err.println("could not find key in hash table");
+            System.err.println("\""+key+"\"");
+            System.out.flush();
         }
         return resp;
     }

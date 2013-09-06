@@ -44,17 +44,20 @@ public class HTTPPlayback implements Runnable {
                     //System.out.println("handled "+numberOfRequests+" request with same socket");
                     line = line.replace("\r", "");
                     line = line.replace("\n", "");
-                    //System.out.println(line);
+                    System.out.println(line);
                     HTTPResponse resp = null;
                     if (line.contains("videoplayback")) {
                         resp = MediaManager.handle(line);
+                        //System.out.println(resp);
                     } else {
                         resp = Main.returnResponse(line);
+                        //System.out.println(resp);
                     }
 
 
                     if (resp == null) {
                         resp = HardcodedResponseGenerator.returnHardcodedResponse(line);
+                        System.out.println("send dummy response");
                     }
 
                     if (resp != null) {

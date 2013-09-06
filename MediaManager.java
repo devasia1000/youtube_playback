@@ -41,12 +41,13 @@ public class MediaManager {
         }
 
         if (!exists) {
-            MediaStore store = new MediaStore(new File("media/" + clen + "-" + type));
+            MediaStore store = new MediaStore(new File("/home/"+System.getProperty("user.name")+"/media/" + clen + "-" + type));
             mediaList.add(store);
             byte[] b = store.processRangeRequest(finRange, initRange);
             String respHeaders = HardcodedResponseGenerator.returnVideoplaybackResponse(mime, b.length);
             byte[] data = HTTPResponse.concat(respHeaders.getBytes(), b);
             resp = new HTTPResponse(data);
+            System.out.println("created resp: "+resp.toString());
         }
 
         if (resp == null) {
