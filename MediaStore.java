@@ -28,10 +28,6 @@ public class MediaStore {
             }
 
             file=f;
-            /*media = new byte[(int) f.length()];
-            DataInputStream dis = new DataInputStream(new FileInputStream(f));
-            dis.readFully(media);
-            dis.close();*/
 
         } catch (Exception e) {
             System.err.println("could not read media file properly");
