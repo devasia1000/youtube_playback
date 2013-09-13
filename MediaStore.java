@@ -1,4 +1,3 @@
-
 /**
  *
  * @author devasia
@@ -12,7 +11,7 @@ public class MediaStore {
 
     String clen;
     String type;
-    byte[] media;
+    File file;
 
     public MediaStore(File f) {
         try {
@@ -27,10 +26,7 @@ public class MediaStore {
                 System.exit(-1);
             }
 
-            media = new byte[(int) f.length()];
-            DataInputStream dis = new DataInputStream(new FileInputStream(f));
-            dis.readFully(media);
-            dis.close();
+            file=f;
 
         } catch (Exception e) {
             System.err.println("could not read media file properly");
@@ -52,8 +48,18 @@ public class MediaStore {
             System.exit(-1);
         }
 
-        // Do NOT remove 'fin+1', this has been tested and it is correct! Look at 'TestingClass' in Github for details
-        byte[] dat = Arrays.copyOfRange(media, init, fin + 1);
+        byte[] dat=null;
+        try {
+            DataInputStream in = new DataInputStream(new FileInputStream(file));
+            in.skip(init - 1);
+            dat = new byte[fin + 1 - init];
+            in.readFully(dat);
+            in.close();
+        } catch (Exception e) {
+            System.err.println("could not process range request");
+            e.printStackTrace();
+        }
+        
         return dat;
     }
 }
